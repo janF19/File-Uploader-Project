@@ -45,11 +45,21 @@ model Session {
 }
 
 model Folder {
-  id        Int      @id @default(autoincrement())
-  name      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  userId    Int
-  user      User     @relation(fields: [userId], references: [id])
-  files     File[]
+  id           Int           @id @default(autoincrement())
+  name         String
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  userId       Int
+  user         User          @relation(fields: [userId], references: [id])
+  files        File[]
+  sharedFolder SharedFolder[] // Add this line to establish the relation
+}
+
+model SharedFolder {
+  id          String    @id @default(uuid())
+  folderId    Int       // Change this to Int to match Folder.id type
+  folder      Folder    @relation(fields: [folderId], references: [id])
+  createdAt   DateTime  @default(now())
+  expiresAt   DateTime
+  accessToken String    @unique
 }

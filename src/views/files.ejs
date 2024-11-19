@@ -24,7 +24,6 @@
           box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       }
       .card:hover {
-          transform: translateY(-5px);
           box-shadow: 0 4px 8px rgba(0,0,0,0.2);
       }
       .file-icon {
@@ -109,6 +108,64 @@
   .folders-section, .files-section {
       margin-bottom: 2rem;
   }
+
+
+  .card {
+    position: relative;  /* Add this */
+    transition: transform 0.2s ease;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Add these new styles */
+.dropdown-menu {
+    z-index: 1000;
+    animation: fadeIn 0.2s ease;
+}
+
+.dropdown {
+    position: static;  /* Change from default */
+}
+
+.card .dropdown {
+    position: relative;  /* Override for dropdowns inside cards */
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Update dropdown styles */
+.card {
+    position: relative;
+    z-index: 1;
+}
+
+.card:hover {
+    z-index: 2;
+}
+
+.dropdown-menu {
+    position: absolute;
+    z-index: 1050; /* Higher than other elements */
+    margin-top: 0;
+}
+
+.card .dropdown {
+    position: relative;
+}
+
+/* Optional: If you want to keep some animation but avoid the layout issues */
+.card {
+    transition: box-shadow 0.2s ease;
+}
   </style>
   </head>
 <body>

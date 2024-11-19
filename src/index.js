@@ -6,6 +6,7 @@ const { PrismaSessionStore } = require('@quixo3/prisma-session-store');
 const path = require('path');
 const authRoutes = require('./routes/auth');
 const fileRoutes = require('./routes/files');
+const shareRouter = require('./routes/share');
 const setupPassport = require('./config/passport');
 const methodOverride = require('method-override');
 const app = express();
@@ -45,7 +46,14 @@ setupPassport(passport);
 // Routes
 app.use('/auth', authRoutes);
 app.use('/files', fileRoutes);
+app.use('/share', shareRouter);
 app.use('/uploads', express.static('uploads'));
+
+// Add this after your routes
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ error: 'Something broke!' });
+});
 
 app.get('/', (req, res) => {
   res.render('index', { user: req.user });

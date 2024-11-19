@@ -29,16 +29,19 @@
         </nav>
 
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2><i class="bi bi-folder-fill text-warning"></i> <%= folder.name %></h2>
-            <div>
-                <button class="btn btn-outline-primary" onclick="renameFolder('<%= folder.id %>')">
-                    <i class="bi bi-pencil"></i> Rename
-                </button>
-                <a href="/files" class="btn btn-outline-secondary">
-                    <i class="bi bi-arrow-left"></i> Back to Files
-                </a>
-            </div>
-        </div>
+          <h2><i class="bi bi-folder-fill text-warning"></i> <%= folder.name %></h2>
+          <div>
+              <button class="btn btn-outline-success" onclick="showShareForm()">
+                  <i class="bi bi-share"></i> Share
+              </button>
+              <button class="btn btn-outline-primary" onclick="renameFolder('<%= folder.id %>')">
+                  <i class="bi bi-pencil"></i> Rename
+              </button>
+              <a href="/files" class="btn btn-outline-secondary">
+                  <i class="bi bi-arrow-left"></i> Back to Files
+              </a>
+          </div>
+      </div>
 
         <!-- Upload Section -->
         <div class="card mb-4">
@@ -177,6 +180,45 @@
 
 
 
+<!-- Add the share modal after your other modals -->
+<div class="modal fade" id="shareFolderModal" tabindex="-1">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title">Share Folder</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+              <form id="shareFolderForm" onsubmit="shareFolder(event)">
+                  <div class="mb-3">
+                      <label class="form-label">Share Duration</label>
+                      <select name="duration" class="form-select" required>
+                          <option value="1d">1 day</option>
+                          <option value="7d">7 days</option>
+                          <option value="30d">30 days</option>
+                      </select>
+                  </div>
+                  <div id="shareLink" class="mb-3" style="display: none;">
+                      <label class="form-label">Share Link</label>
+                      <div class="input-group">
+                          <input type="text" class="form-control" id="shareLinkInput" readonly>
+                          <button class="btn btn-outline-secondary" type="button" onclick="copyShareLink()">
+                              <i class="bi bi-clipboard"></i> Copy
+                          </button>
+                      </div>
+                  </div>
+                  <div class="text-end">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      <button type="submit" class="btn btn-primary">Generate Link</button>
+                  </div>
+              </form>
+          </div>
+      </div>
+  </div>
+</div>
+
+
+
 
     <script>
     function renameFolder(folderId) {
@@ -213,6 +255,72 @@
               alert('Error fetching file details');
           });
   }
+
+
+  // Add these functions to your existing script section
+function showShareForm() {
+  const modal = new bootstrap.Modal(document.getElementById('shareFolderModal'));
+  document.getElementById('shareLink').style.display = 'none';
+  modal.show();
+}
+
+async function shareFolder(event) {
+  event.preventDefault();
+  const form = event.target;
+  const duration = form.duration.value;
+  const folderId = '<%= folder.id %>';
+
+  try {
+      // Add loading state to button
+      const submitButton = form.querySelector('button[type="submit"]');
+      const originalText = submitButton.innerHTML;
+      submitButton.innerHTML = '<i class="bi bi-hourglass"></i> Generating...';
+      submitButton.disabled = true;
+
+      console.log('Sending share request for folder:', folderId, 'duration:', duration); // Debug log
+
+      const response = await fetch(`/share/folder/${folderId}/share`, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ duration })
+      });
+      
+      if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      console.log('Received share response:', data); // Debug log
+
+      const shareLinkDiv = document.getElementById('shareLink');
+      const shareLinkInput = document.getElementById('shareLinkInput');
+      shareLinkInput.value = data.shareUrl;
+      shareLinkDiv.style.display = 'block';
+
+      // Reset submit button
+      submitButton.innerHTML = originalText;
+      submitButton.disabled = false;
+  } catch (error) {
+      console.error('Error sharing folder:', error);
+      alert('Failed to create share link: ' + error.message);
+  }
+}
+
+function copyShareLink() {
+  const shareLinkInput = document.getElementById('shareLinkInput');
+  shareLinkInput.select();
+  document.execCommand('copy');
+  
+  // Optional: Show feedback
+  const copyButton = event.target.closest('button');
+  const originalText = copyButton.innerHTML;
+  copyButton.innerHTML = '<i class="bi bi-check"></i> Copied!';
+  setTimeout(() => {
+      copyButton.innerHTML = originalText;
+  }, 2000);
+}
     </script>
 
 
