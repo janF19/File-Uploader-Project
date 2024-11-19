@@ -33,7 +33,7 @@ router.post('/login',
     failureFlash: true
   })
 );
-
+ 
 router.get('/register', (req, res) => {
   res.render('register');
 });
