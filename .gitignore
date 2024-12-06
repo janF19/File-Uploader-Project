@@ -1,7 +1,7 @@
 node_modules
 .env
 
-migrations/
+
 *.sql
 backup.sql
 uploads/
