@@ -1,4 +1,4 @@
-// src/routes/files.js
+
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
@@ -33,8 +33,7 @@ const storage = multer.diskStorage({
 
 
 
-// Modify the main files route to include folders
-// Main files route
+
 router.get('/', ensureAuthenticated, async (req, res) => {
     try {
         const folders = await prisma.folder.findMany({
@@ -56,12 +55,6 @@ router.get('/', ensureAuthenticated, async (req, res) => {
     }
 });
 
-
-
-
-
-
-// Modify the upload route to handle folders
 
 // File upload route
 router.post('/upload', ensureAuthenticated, upload.single('file'), async (req, res) => {
@@ -101,9 +94,6 @@ router.post('/upload', ensureAuthenticated, upload.single('file'), async (req, r
 
 
 
-
-//add folders
-// Add folder routes
 router.post('/folders', ensureAuthenticated, async (req, res) => {
     try {
       const { name } = req.body;
@@ -120,7 +110,7 @@ router.post('/folders', ensureAuthenticated, async (req, res) => {
   });
 
 
-  // Add route to update folder
+ 
 router.put('/folders/:id', ensureAuthenticated, async (req, res) => {
     try {
       const { name } = req.body;
@@ -135,7 +125,7 @@ router.put('/folders/:id', ensureAuthenticated, async (req, res) => {
   });
 
 
-// File delete route
+
 // File delete route (works for both organized and unorganized files)
 router.delete('/files/:id', ensureAuthenticated, async (req, res) => {
     try {
@@ -204,7 +194,7 @@ router.delete('/folders/:id', ensureAuthenticated, async (req, res) => {
 });
 
 
-  // Add route to get folder contents
+ 
 router.get('/folders/:id', ensureAuthenticated, async (req, res) => {
     try {
       const folder = await prisma.folder.findUnique({
@@ -224,7 +214,7 @@ router.get('/folders/:id', ensureAuthenticated, async (req, res) => {
   
 
 
-  // Add file download route if you haven't already
+
 
 // File download route
 router.get('/download/:id', ensureAuthenticated, async (req, res) => {
@@ -252,7 +242,7 @@ router.get('/download/:id', ensureAuthenticated, async (req, res) => {
 
 
 //getting file details
-// Add this route if you haven't already
+
 router.get('/files/:id/details', ensureAuthenticated, async (req, res) => {
     try {
         const file = await prisma.file.findUnique({

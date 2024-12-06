@@ -50,7 +50,7 @@ router.post('/folder/:folderId/share', async (req, res) => {
     }
 });
 
-// Add this GET route to handle shared folder access
+
 router.get('/:accessToken', async (req, res) => {
     try {
         const { accessToken } = req.params;
