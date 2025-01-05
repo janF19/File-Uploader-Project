@@ -102,6 +102,3 @@ The application uses the following Prisma schema:
 - **Folder**: Organizes files into directories
 - **SharedFolder**: Manages folder sharing functionality
 
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
