@@ -5,3 +5,8 @@ node_modules
 *.sql
 backup.sql
 uploads/
+.env
+.DS_Store
+.env.local
+node_modules
+README2.md

@@ -1,14 +1,24 @@
-# File Uploader
+# File Uploader Project
 
 ### Introduction
 
 In this project, I build a stripped-down version of Google Drive. The File Uploader application allows users to manage their files and folders, providing a simple interface for uploading, organizing, and sharing files. This project is based on Odin project's requirements which could be found at https://www.theodinproject.com/lessons/nodejs-file-uploader
 
-### Assignment
+![Landing Page](docs/image.png)
+*Landing page of the File Uploader application*
 
-This project involves setting up a new application using Express and Prisma, along with implementing various features for file management. Below are the key components of the project:
+![Dashboard](docs/image_detail.png)
+*Dashboard view showing uploaded files and folders*
 
-### Features
+## Features
+
+- 🔐 Secure authentication using Passport.js with session persistence
+- 📁 Create, read, update, and delete folders
+- 📤 File upload functionality with Multer
+- ☁️ Cloud storage integration (Cloudinary/Supabase)
+- 🔗 Time-limited folder sharing capabilities
+- 📊 File metadata viewing and management
+- 💾 PostgreSQL database for data persistence
 
 1. **Project Setup**:
   - Set up a new Node.js project using Express.
@@ -40,46 +50,58 @@ This project involves setting up a new application using Express and Prisma, alo
  - Users can specify a duration for the shared link (e.g., 1 day, 10 days).
  - Generate a shareable link in the format: `https://yourapp.com/share/c758c495-0705-44c6-8bab-6635fd12cf81`, allowing unauthenticated users to access the shared folder.
 
-### Technologies Used
+## Prerequisites
 
-- **Node.js**: JavaScript runtime for building the server-side application.
-- **Express**: Web framework for Node.js to handle routing and middleware.
-- **Prisma**: ORM for database interactions and schema management.
-- **Passport.js**: Middleware for authentication.
-- **Multer**: Middleware for handling file uploads.
-- **Supabase**: Cloud storage service for storing uploaded files.
+- Node.js (v14 or higher)
+- PostgreSQL database
+- npm or yarn package manager
 
-### Getting Started
-
-To get started with the project, follow these steps:
+## Installation
 
 1. Clone the repository:
-  ```bash
-  git clone https://github.com/yourusername/file-uploader.git
-  cd file-uploader
-
+```bash
+git clone <your-repo-url>
+cd file-uploader
+```
 
 2. Install dependencies:
-   ```bash
-   npm install
-   ```
+```bash
+npm install
+```
 
-3. Set up your environment variables in a `.env` file:
-   ```plaintext
-   DATABASE_URL="your_database_url"
-   SUPABASE_URL="your_supabase_url"
-   SUPABASE_ANON_KEY="your_supabase_anon_key"
-   ```
+3. Create a `.env` file in the root directory with the following variables:
+```env
+DATABASE_URL="postgresql://username:password@localhost:5432/file_uploader?schema=public"
+SESSION_SECRET="your-secret-key"
+```
 
-4. Run the application:
-   ```bash
-   npm run dev
-   ```
+4. Set up the database and run migrations:
+```bash
+npx prisma generate
+npx prisma migrate dev
+```
 
-5. Access the application in your browser at `http://localhost:3000`.
+## Running the Application
 
-### Contributing
-Contributions are welcome! If you have suggestions for improvements or new features, feel free to open an issue or submit a pull request.
+1. Start the server:
+```bash
+cd src
+node index.js
+```
 
-### License
-This project is licensed under the MIT License.
+2. Access the application at `http://localhost:3000`
+
+
+## Database Schema
+
+The application uses the following Prisma schema:
+
+- **User**: Stores user authentication details and relationships to files/folders
+- **File**: Manages file metadata and relationships
+- **Session**: Handles session persistence
+- **Folder**: Organizes files into directories
+- **SharedFolder**: Manages folder sharing functionality
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
